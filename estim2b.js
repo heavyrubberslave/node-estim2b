@@ -53,6 +53,30 @@ module.exports = class Estim2B {
         console.log("Write: " + command);
     }
 
+    read() {
+        this.port.read();
+    }
+
+    static parseResponse(response) {
+        const parts = response.split(':');
+
+        return {
+            batteryLevel: parseInt(parts[0]),
+            channelALevel: parseInt(parts[1]),
+            channelBLevel: parseInt(parts[2]),
+            pulseFrequency: parseInt(parts[3]),
+            pulsePwm: parseInt(parts[4]),
+            currentMode: parseInt(parts[5]),
+            powerMode: parts[6],
+            channelsJoined: parseInt(parts[7]) === 1,
+            firmwareVersion: parts[8]
+        };
+    }
+
+    getStatus() {
+        return self.parseResponse(this.read());
+    }
+
     setMode(mode) {
         if (-1 === Estim2B.MODES.indexOf(mode)) {
             throw new Error('Invalid mode: ' + mode);
