@@ -1,7 +1,7 @@
 {
   "name": "estim2b",
   "version": "0.1.0",
-  "main": "./2b.js",
+  "main": "estim2b.js",
   "dependencies": {
     "serialport": "^7.1.0"
   }
