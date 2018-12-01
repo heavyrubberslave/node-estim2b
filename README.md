@@ -26,5 +26,5 @@ instance.setMode(Estim2B.MODE_RANDOM);
 There are some unit tests.
 
 ```bash
-$ npm run test
+$ yarn test
 ```
