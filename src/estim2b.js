@@ -50,11 +50,6 @@ module.exports = class Estim2B {
 
     send(command) {
         this.port.write(command + "\r");
-        console.log("Write: " + command);
-    }
-
-    read() {
-        this.port.read();
     }
 
     static parseResponse(response) {
@@ -73,33 +68,50 @@ module.exports = class Estim2B {
         };
     }
 
+    /**
+     * Returns the status the current status
+     * @returns object
+     */
     getStatus() {
-        return self.parseResponse(this.read());
+        return this.constructor.parseResponse(this.port.read());
     }
 
+    /**
+     * Sets the mode (MODE_*)
+     * @param mode
+     */
     setMode(mode) {
-        if (-1 === Estim2B.MODES.indexOf(mode)) {
+        if (-1 === this.constructor.MODES.indexOf(mode)) {
             throw new Error('Invalid mode: ' + mode);
         }
 
         this.send('M' + mode);
     }
 
+    /**
+     * Sets the power mode and sets both channel to 0%
+     * @param powerMode
+     */
     setPowerMode(powerMode) {
-        if (-1 === Estim2B.POWERS.indexOf(powerMode)) {
+        if (-1 === this.constructor.POWERS.indexOf(powerMode)) {
             throw new Error('Invalid power mode: ' + powerMode);
         }
 
         this.send(powerMode);
     }
 
+    /**
+     * Sets the power for a channel (CHANNEL_*) to the given percentage (0-99)
+     * @param channel
+     * @param percentage
+     */
     setPower(channel, percentage) {
-        if (-1 === Estim2B.CHANNELS.indexOf(channel)){
+        if (-1 === this.constructor.CHANNELS.indexOf(channel)){
             throw new Error('Illegal output channel: ' + channel);
         } else if (percentage < 0) {
-            throw new Error('Percentage must be greater or equals 0.0');
+            throw new Error('Percentage must be greater or equals 0');
         } else if (percentage > 99) {
-            throw new Error('Percentage must be lower or equals 100.0');
+            throw new Error('Percentage must be less or equals 99');
         }
 
         this.send(channel + parseInt(percentage));
@@ -109,20 +121,20 @@ module.exports = class Estim2B {
         if (setting < 2) {
             throw new Error('Pulse PWM must be greater or equals 2');
         } else if (setting > 99) {
-            throw new Error('Pulse PWM must be lower or equals 100');
+            throw new Error('Pulse PWM must be less or equals 99');
         }
 
-        this.send(this.PULSE_PWM + parseInt(setting));
+        this.send(this.constructor.PULSE_PWM + parseInt(setting));
     }
 
     setPulseFrequency(setting) {
         if (setting < 2) {
             throw new Error('Pulse frequency must be greater or equals 2');
         } else if (setting > 99) {
-            throw new Error('Pulse frequency must be lower or equals 100');
+            throw new Error('Pulse frequency must be less or equals 99');
         }
 
-        this.send(this.PULSE_FREQUENCY + parseInt(setting));
+        this.send(this.constructor.PULSE_FREQUENCY + parseInt(setting));
     }
 
     /**

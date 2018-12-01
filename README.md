@@ -21,3 +21,10 @@ const instance = new Estim2B(port);
 
 instance.setMode(Estim2B.MODE_RANDOM);
 ```
+
+## Tests
+There are some unit tests.
+
+```bash
+$ npm run test
+```

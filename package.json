@@ -1,8 +1,19 @@
 {
   "name": "estim2b",
   "version": "0.1.0",
-  "main": "estim2b.js",
+  "main": "src/estim2b.js",
   "dependencies": {
     "serialport": "^7.1.0"
+  },
+  "devDependencies": {
+    "ava": "1.0.0-rc.2",
+    "sinon": "^7.1.1"
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "ava": {
+    "files": ["tests/*"],
+    "sources": ["src/*", "tests/*"]
   }
 }
