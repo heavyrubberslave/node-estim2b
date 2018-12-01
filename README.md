@@ -1,5 +1,7 @@
 # node-estim2b
 
+[![CircleCI](https://circleci.com/gh/heavyrubberslave/node-estim2b.svg?style=svg)](https://circleci.com/gh/heavyrubberslave/node-estim2b)
+
 A node implementation for communicating with the 
 [E-Stim Systems 2B Power Box](https://store.e-stim.co.uk/index.php?main_page=product_info&cPath=23_24&products_id=17). 
 
