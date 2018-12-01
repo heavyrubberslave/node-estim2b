@@ -12,6 +12,7 @@ Estim2B.POWER_HIGH = 'H';
 Estim2B.POWER_LOW = 'L';
 Estim2B.POWERS = [Estim2B.POWER_LOW, Estim2B.POWER_HIGH];
 
+// See https://store.e-stim.co.uk/downloads/manuals/2B.pdf (p. 23)
 Estim2B.MODE_PULSE = 0;
 Estim2B.MODE_ALTERNATING = 1;
 Estim2B.MODE_CONTINOUS = 2;
@@ -59,33 +60,33 @@ Estim2B.prototype.setPowerMode = function setPowerMode(powerMode) {
 Estim2B.prototype.setPower = function setPower(channel, percentage) {
     if (-1 === Estim2B.CHANNELS.indexOf(channel)){
         throw new Error('Illegal output channel: ' + channel);
-    } else if (percentage < 0.0) {
+    } else if (percentage < 0) {
         throw new Error('Percentage must be greater or equals 0.0');
-    } else if (percentage > 100.0) {
+    } else if (percentage > 99) {
         throw new Error('Percentage must be lower or equals 100.0');
     }
 
-    this.send(channel + percentage);
+    this.send(channel + parseInt(percentage));
 };
 
 Estim2B.prototype.setPulseFrequency = function setPulseFrequency(setting) {
     if (setting < 2) {
         throw new Error('Pulse frequency must be greater or equals 2');
-    } else if (setting > 100) {
+    } else if (setting > 99) {
         throw new Error('Pulse frequency must be lower or equals 100');
     }
 
-    this.send(Estim2B.CHANNEL_PULSE_FREQUENCY + setting);
+    this.send(Estim2B.CHANNEL_PULSE_FREQUENCY + parseInt(setting));
 };
 
 Estim2B.prototype.setPulsePwm = function setPulsePwm(setting) {
     if (setting < 2) {
         throw new Error('Pulse PWM must be greater or equals 2');
-    } else if (setting > 100) {
+    } else if (setting > 99) {
         throw new Error('Pulse PWM must be lower or equals 100');
     }
 
-    this.send(Estim2B.CHANNEL_PULSE_PWM + setting);
+    this.send(Estim2B.CHANNEL_PULSE_PWM + parseInt(setting));
 };
 
 Estim2B.prototype.setMode = function setMode(mode) {
@@ -97,10 +98,25 @@ Estim2B.prototype.setMode = function setMode(mode) {
 };
 
 /**
- * Set all Channels to defaults (A/B: 0%, C/D: 50, Mode: Pulse)
+ * Set all channels to defaults (A/B: 0%, C/D: 50, Mode: Pulse)
  */
 Estim2B.prototype.reset = function reset() {
     this.send('E');
 };
 
-module.exports = Estim2B;
+/**
+ * Set channel A/B to 0%
+ */
+Estim2B.prototype.setPowerZero = function setPowerZero() {
+    this.send('K');
+};
+
+Estim2B.prototype.joinChannels = function joinChannels() {
+    this.send('J');
+};
+
+Estim2B.prototype.unlinkChannels = function unlinkChannels() {
+    this.send('U');
+};
+
+module.exports = Object.freeze(Estim2B);
