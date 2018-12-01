@@ -7,7 +7,7 @@ A node implementation for communicating with the
 
 ```js
 const Serialport = require('serialport');
-const Estim2B = require('./2b.js');
+const Estim2B = require('estim2b');
 
 const port = new Serialport('/dev/ttyUSB0');
 
