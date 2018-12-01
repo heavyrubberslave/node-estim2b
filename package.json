@@ -1,6 +1,7 @@
 {
   "name": "estim2b",
   "version": "0.1.0",
+  "description": "A node implementation for communicating with the E-Stim Systems 2B Power Box.",
   "main": "src/estim2b.js",
   "dependencies": {
     "node": ">=10.14.1",
@@ -22,7 +23,6 @@
       "tests/*"
     ]
   },
-  "description": "[![CircleCI](https://circleci.com/gh/heavyrubberslave/node-estim2b.svg?style=svg)](https://circleci.com/gh/heavyrubberslave/node-estim2b)",
   "directories": {
     "test": "tests"
   },
