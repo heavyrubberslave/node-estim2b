@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "src/estim2b.js",
   "dependencies": {
+    "node": ">=10.14.1",
     "serialport": "^7.1.0"
   },
   "devDependencies": {
@@ -13,7 +14,30 @@
     "test": "ava"
   },
   "ava": {
-    "files": ["tests/*"],
-    "sources": ["src/*", "tests/*"]
-  }
+    "files": [
+      "tests/*"
+    ],
+    "sources": [
+      "src/*",
+      "tests/*"
+    ]
+  },
+  "description": "[![CircleCI](https://circleci.com/gh/heavyrubberslave/node-estim2b.svg?style=svg)](https://circleci.com/gh/heavyrubberslave/node-estim2b)",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heavyrubberslave/node-estim2b.git"
+  },
+  "keywords": [
+    "estim",
+    "2B"
+  ],
+  "author": "heavyrubberslave",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/heavyrubberslave/node-estim2b/issues"
+  },
+  "homepage": "https://github.com/heavyrubberslave/node-estim2b#readme"
 }
