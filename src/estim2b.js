@@ -1,5 +1,7 @@
 'use strict';
 
+const Readline = require('@serialport/parser-readline');
+
 module.exports = class Estim2B {
     static get CHANNEL_A() { return 'A'; }
     static get CHANNEL_B() { return 'B'; }
@@ -46,6 +48,14 @@ module.exports = class Estim2B {
 
     constructor(port) {
         this.port = port;
+        this.status = null;
+
+        const parser = new Readline()
+        this.port.pipe(parser)
+
+        parser.on('data', line => {
+            this.status = this.constructor.parseResponse(line);
+        })
     }
 
     send(command) {
@@ -57,10 +67,10 @@ module.exports = class Estim2B {
 
         return {
             batteryLevel: parseInt(parts[0]),
-            channelALevel: parseInt(parts[1]),
-            channelBLevel: parseInt(parts[2]),
-            pulseFrequency: parseInt(parts[3]),
-            pulsePwm: parseInt(parts[4]),
+            channelALevel: parseInt(parts[1])/2,
+            channelBLevel: parseInt(parts[2])/2,
+            pulseFrequency: parseInt(parts[3])/2,
+            pulsePwm: parseInt(parts[4])/2,
             currentMode: parseInt(parts[5]),
             powerMode: parts[6],
             channelsJoined: parseInt(parts[7]) === 1,
@@ -73,7 +83,9 @@ module.exports = class Estim2B {
      * @returns object
      */
     getStatus() {
-        return this.constructor.parseResponse(this.port.read());
+        this.send('');
+
+        return this.status;
     }
 
     /**
