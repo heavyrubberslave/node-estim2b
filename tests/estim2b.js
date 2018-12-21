@@ -1,6 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon'
 import Serialport from 'serialport';
+import Readline from '@serialport/parser-readline';
 import Estim2B from '../src/estim2b.js';
 
 test('constructor returns object', t => {
@@ -12,7 +13,8 @@ test('constructor returns object', t => {
 
 test('send command', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.send('FOO');
 
@@ -21,9 +23,10 @@ test('send command', t => {
 
 test('getStatus returns status object', t => {
     const port = sinon.createStubInstance(Serialport);
-    port.read.callsFake(() => '100:45:75:50:45:4:L:0:FW1.1');
+    const readline = sinon.createStubInstance(Readline);
+    port.read.callsFake(() => '100:90:150:100:90:4:L:0:2.106');
 
-    const instance = new Estim2B(port);
+    const instance = new Estim2B(port, readline);
     const res = instance.getStatus();
 
     const expectedRes = {
@@ -35,15 +38,18 @@ test('getStatus returns status object', t => {
         currentMode: 4,
         powerMode: "L",
         channelsJoined: false,
-        firmwareVersion: "FW1.1"
+        firmwareVersion: "2.106"
     };
+
+    instance.status = expectedRes;
 
     t.deepEqual(res, expectedRes);
 });
 
 test('set power of channel A to 10%', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.setPower(Estim2B.CHANNEL_A, 10);
 
@@ -52,7 +58,8 @@ test('set power of channel A to 10%', t => {
 
 test('set power of invalid channel', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPower('F', 10)
@@ -63,7 +70,8 @@ test('set power of invalid channel', t => {
 
 test('set power of channel A to high', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPower(Estim2B.CHANNEL_A, 101)
@@ -74,7 +82,8 @@ test('set power of channel A to high', t => {
 
 test('set power of channel A to low', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPower(Estim2B.CHANNEL_A, -1)
@@ -85,7 +94,8 @@ test('set power of channel A to low', t => {
 
 test('reset channels, frequency and pwm', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.reset();
 
@@ -94,7 +104,8 @@ test('reset channels, frequency and pwm', t => {
 
 test('set power of both channels to 0', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.setPowerZero();
 
@@ -103,7 +114,8 @@ test('set power of both channels to 0', t => {
 
 test('set power mode to high', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.setPowerMode(Estim2B.POWER_HIGH);
 
@@ -113,7 +125,8 @@ test('set power mode to high', t => {
 // Pulse frequency
 test('set pulse frequency', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.setPulseFrequency(20);
 
@@ -123,7 +136,8 @@ test('set pulse frequency', t => {
 
 test('set pulse frequency to low', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPulseFrequency(1)
@@ -134,7 +148,8 @@ test('set pulse frequency to low', t => {
 
 test('set pulse frequency to high', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPulseFrequency(100)
@@ -146,7 +161,8 @@ test('set pulse frequency to high', t => {
 // Pulse PWM
 test('set pulse PWM', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.setPulsePwm(20);
 
@@ -156,7 +172,8 @@ test('set pulse PWM', t => {
 
 test('set pulse PWM to low', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPulsePwm(1)
@@ -167,7 +184,8 @@ test('set pulse PWM to low', t => {
 
 test('set pulse PWM to high', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     const err = t.throws(function () {
         instance.setPulsePwm(100)
@@ -179,7 +197,8 @@ test('set pulse PWM to high', t => {
 // Joining
 test('join channels', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.joinChannels();
 
@@ -188,7 +207,8 @@ test('join channels', t => {
 
 test('unlink channels', t => {
     const port = sinon.createStubInstance(Serialport);
-    const instance = new Estim2B(port);
+    const readline = sinon.createStubInstance(Readline);
+    const instance = new Estim2B(port, readline);
 
     instance.unlinkChannels();
 

@@ -1,7 +1,5 @@
 'use strict';
 
-const Readline = require('@serialport/parser-readline');
-
 module.exports = class Estim2B {
     static get CHANNEL_A() { return 'A'; }
     static get CHANNEL_B() { return 'B'; }
@@ -46,16 +44,16 @@ module.exports = class Estim2B {
         this.MODE_JUMP,
     ] }
 
-    constructor(port) {
+    constructor(port, parser) {
         this.port = port;
+        this.parser = parser;
         this.status = null;
 
-        const parser = new Readline()
-        this.port.pipe(parser)
+        this.port.pipe(this.parser);
 
-        parser.on('data', line => {
+        this.parser.on('data', line => {
             this.status = this.constructor.parseResponse(line);
-        })
+        });
     }
 
     send(command) {
