@@ -6,7 +6,8 @@ import Estim2B from '../src/estim2b.js';
 
 test('constructor returns object', t => {
     const port = sinon.spy();
-    const instance = new Estim2B(port);
+    const readline = sinon.spy();
+    const instance = new Estim2B(port, readline);
 
     t.true(instance instanceof Estim2B);
 });

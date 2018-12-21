@@ -9,6 +9,7 @@ A node implementation for communicating with the
 
 ```js
 const Serialport = require('serialport');
+const Readline = require('@serialport/parser-readline');
 const Estim2B = require('estim2b');
 
 const port = new Serialport('/dev/ttyUSB0');
@@ -19,7 +20,7 @@ port.on('open', function () {
     console.log('Error -> ' + err.message);
 });
 
-const instance = new Estim2B(port);
+const instance = new Estim2B(port, new Readline());
 
 instance.setMode(Estim2B.MODE_RANDOM);
 ```
