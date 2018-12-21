@@ -5,8 +5,12 @@ import Readline from '@serialport/parser-readline';
 import Estim2B from '../src/estim2b.js';
 
 test('constructor returns object', t => {
-    const port = sinon.spy();
-    const readline = sinon.spy();
+    const port = sinon.createStubInstance(Serialport);
+    port.pipe.callsFake(() => {});
+    const readline = sinon.createStubInstance(Readline);
+    readline.on.callsFake((arg) => {
+        t.is(arg, 'data');
+    });
     const instance = new Estim2B(port, readline);
 
     t.true(instance instanceof Estim2B);
