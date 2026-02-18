@@ -1,3 +1,5 @@
+⚠️ **The code of this repository has been integrated into the [SlvCtrl+](https://github.com/SlvCtrlPlus) project.**
+
 # node-estim2b
 
 [![CircleCI](https://circleci.com/gh/heavyrubberslave/node-estim2b.svg?style=svg)](https://circleci.com/gh/heavyrubberslave/node-estim2b)
